@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+class Account {
+private:
+    int balance; 
+public:
+    Account(int initialBalance) {
+        if (initialBalance >= 0) {
+            balance = initialBalance;
+        } else {
+            balance = 0;
+            cout << "Invalid initial balance" << endl;
+        }
+    }
+    void credit(int amount) {
+        balance += amount;
+    }
+    void debit(int amount) {
+        if (amount <= balance) {
+            balance -= amount;
+        } else {
+            cout << "Debit amount exceeded account balance." << endl;
+        }
+    }
+    int getBalance() const {
+        return balance;
+    }
+};
+
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        cout << "Use: " << argv[0] << " <initial_balance> <transaction1> <transaction2> ..." << endl;
+        return 1;
+    }
+    int initialBalance = atoi(argv[1]);
+    Account myAccount(initialBalance);
+    for (int i = 2; i < argc; ++i) {
+        int transaction = atoi(argv[i]);
+        if (transaction > 0) {
+            myAccount.credit(transaction);
+        } else {
+            myAccount.debit(-transaction);
+        }
+    }
+    cout << "Final Account Balance: " << myAccount.getBalance() << endl;
+    return 0;
+}
