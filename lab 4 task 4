@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class Books{
+    string author, title, publisher;
+    float price;
+    int stock;
+public:
+    Books(string a, string t, string p, float pr, int s){
+        author = a;
+        title = t;
+        publisher = p;
+        price = pr;
+        stock = s;
+    }
+    bool isAvailable(string t, string a){
+        return (title == t && author == a);
+    }
+    void displayDetails(){
+        cout << "Title: " << title << "\nAuthor: " << author << "\nPublisher: " << publisher
+             << "\nPrice: $" << price << "\nStock: " << stock << " copies\n";
+    }
+    void sellCopies(int copies){
+        if (copies <= stock) {
+            cout << "Total Cost: $" << price * copies << "\n";
+            stock -= copies;
+        } else {
+            cout << "Required copies not in stock\n";
+        }
+    }
+};
+int main(int argc, char *argv[]){
+    if (argc < 3) {
+        cout << "Usage: " << argv[0] << " <title> <author>\n";
+        return 1;
+    }
+    string searchTitle = argv[1];
+    string searchAuthor = argv[2];
+    Books inventory[] = {
+        Books("J.K. Rowling", "Harry Potter", "Bloomsbury", 39.99, 10),
+        Books("George Orwell", "1984", "Secker & Warburg", 19.99, 5),
+        Books("J.R.R. Tolkien", "The Hobbit", "Allen & Unwin", 29.99, 7)
+    };
+    int numBooks= 3;
+    bool found= false;
+    for (int i=0; i<numBooks; i++) {
+        if (inventory[i].isAvailable(searchTitle, searchAuthor)) {
+            found = true;
+            inventory[i].displayDetails();
+            int copies;
+            cout << "Enter number of copies required: ";
+            cin >> copies;
+            inventory[i].sellCopies(copies);
+            break;
+        }
+    }
+    if (!found){
+        cout << "Book not available\n";
+    }
+    return 0;
+}
